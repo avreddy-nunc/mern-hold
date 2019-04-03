@@ -8,6 +8,9 @@ const PlatformSchema = new mongoose.Schema({
     height : {
         type : Number,
         default : 0
+    },
+    file : {
+        type : String
     }
 });
 

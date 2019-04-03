@@ -1,5 +1,7 @@
-var FileReader = require('filereader');
-var NumpyLoader = function () {
+var NumpyLoader = {
+    open: open,
+    ajax: ajax
+};
     function asciiDecode(buf) {
         return String.fromCharCode.apply(null, new Uint8Array(buf));
     }
@@ -13,7 +15,7 @@ var NumpyLoader = function () {
 
     function fromArrayBuffer(buf) {
         // Check the magic number
-        var magic = buf.slice(0,6);
+        var magic = asciiDecode(buf.slice(0,6));
         if (magic.slice(1,6) != 'NUMPY') {
             throw new Error('unknown file type');
         }
@@ -21,12 +23,12 @@ var NumpyLoader = function () {
         var version = new Uint8Array(buf.slice(6,8)),
             headerLength = readUint16LE(buf.slice(8,10)),
             headerStr = asciiDecode(buf.slice(10, 10+headerLength));
-        offsetBytes = 10 + headerLength;
+        var offsetBytes = 10 + headerLength;
         //rest = buf.slice(10+headerLength);  XXX -- This makes a copy!!! https://www.khronos.org/registry/typedarray/specs/latest/#5
-
+        var info = JSON.parse(headerStr.toLowerCase().replace('(','[').replace('),',']').replace(/'/g, '"'));
         // Hacky conversion of dict literal string to JS Object
-        eval("var info = " + headerStr.toLowerCase().replace('(','[').replace('),',']'));
-
+        //eval("var info = " + headerStr.toLowerCase().replace('(','[').replace('),',']'));
+        console.log(info);
         // Intepret the bytes according to the specified dtype
         var data;
         if (info.descr === "|u1") {
@@ -45,9 +47,11 @@ var NumpyLoader = function () {
             data = new Float32Array(buf, offsetBytes);
         } else if (info.descr === "<f8") {
             data = new Float64Array(buf, offsetBytes);
+        }else if(info.descr === "<i8"){
+            data = new BigInt64Array(buf, offsetBytes);
         } else {
             throw new Error('unknown numeric dtype')
-        }FileReader
+        }
 
         return {
             shape: info.shape,
@@ -57,16 +61,30 @@ var NumpyLoader = function () {
     }
 
     function open(file, callback) {
-        var ndarray = fromArrayBuffer(file);
-        callback(ndarray);
-        /*var reader = new FileReader();
+        var reader = new FileReader();
         reader.onload = function() {
             // the file contents have been read as an array buffer
             var buf = reader.result;
-            var ndarray = fromArrayBuffer(buf);
-            callback(ndarray);
+            var arr = fromArrayBuffer(buf);
+            //console.log(arr);
+            var newArr = [];
+            var row = arr.shape[0];
+            var col = arr.shape[1];
+            for(var i=0;i<row;i++){
+                newArr[i] = [];
+                for(var j=0;j<col;j++){
+                    var index = i+j;
+                    //console.log(i,j,newArr[i][j]);
+                    if(typeof arr.data[index] === 'bigint'){
+                        //arr.data[index] = Number(String(arr.data[index]));
+                    }
+                    newArr[i][j] = arr.data[index];
+                }
+            }
+            //console.log(newArr);
+            callback(newArr);
         };
-        reader.readAsArrayBuffer(file);*/
+        reader.readAsArrayBuffer(file);
     }
 
     function ajax(url, callback) {
@@ -81,9 +99,4 @@ var NumpyLoader = function () {
         xhr.send(null);
     }
 
-    return {
-        open: open,
-        ajax: ajax
-    };
-};
-module.exports =  NumpyLoader;
+export default NumpyLoader;

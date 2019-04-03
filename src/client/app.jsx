@@ -1,24 +1,22 @@
 // Node.JS
 import React from "react";
 import ReactDOM from "react-dom";
-  
+import  {BrowserRouter as Router, Switch, Route, } from "react-router-dom"
+import Home from "./components/Home";
+import List from "./components/List";
+
 class App extends React.Component {
-
-  constructor(props) {
-    super(props);
-    
-    const test = [1,2,3];
-    console.log(test.includes(1));
-  }
-
   render() {
     return (
-      <div>
-        <p>React reporting in!</p>
-      </div>
+        <Router>
+          <Switch>
+            <Route path={'/'} exact component={Home} />
+            <Route path={'/list'} exact component={List} />
+          </Switch>
+        </Router>
     );
   }
-};
+}
 
 export default App;
 
