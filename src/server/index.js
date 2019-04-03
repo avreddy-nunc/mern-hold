@@ -34,7 +34,10 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(logger("dev"));
 app.use('/api', Routes);
-
+/*handling requests not in express*/
+app.get('*', (req,res) =>{
+    res.sendFile(path.join(__dirname+'./../../public/index.html'));
+});
 app.listen(process.env.port, () => {
     utils.log(`Server has started and is listening on port ${process.env.port}!`)
 });

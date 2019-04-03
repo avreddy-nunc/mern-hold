@@ -1,10 +1,11 @@
 //var a = [[3,3,3,3,3,3],[3,1,2,3,1,3],[3,1,2,3,1,3],[3,3,3,1,3,3]];
 //var a = [[3,3,3,3,5,3],[3,0,2,3,1,3],[3,1,2,3,1,3],[3,3,3,1,3,3]];
 var FindStoredWater = function (arr) {
-  var a = [[5, 5, 5, 5, 5], [9, 1, 1, 1, 5], [5, 1, 5, 1, 5], [5, 1, 1, 1, 5], [5, 5, 5, 5, 5]];
+  var a = JSON.parse(JSON.stringify(arr));
   var wasted = [];
   var tested = [];
   var used = [];
+  var storedCudes = [];
   var useful = 0;
   var row = a.length;
   var col = a[0].length;
@@ -16,23 +17,24 @@ var FindStoredWater = function (arr) {
       }
     }
   }
-  console.log(row, col);
+  //console.log(row, col);
   for (var k = 2; k <= maxHeight; k++) {
-    console.log('layer', k);
+    //console.log('layer', k);
     used = [];
     for (i = 1; i < row - 1; i++) {
       for (j = 1; j < col - 1; j++) {
         if (a[i][j] < k) {
           tested = [];
-          console.log('testing', i, j);
+          //console.log('testing', i, j);
           if (checkForLeakage(i, j)) {
-            console.log(i, j, 'wasted');
+            //console.log(i, j, 'wasted');
             wasted.push([i, j]);
           } else {
             if (isItemInArray(used, [i, j])) {
               a[i][j]++;
-              console.log(i, j, 'used', a[i][j]);
+              //console.log(i, j, 'used', a[i][j]);
               used.push([i, j]);
+              storedCudes.push([i,j]);
               useful++
             }
           }
@@ -40,11 +42,11 @@ var FindStoredWater = function (arr) {
       }
     }
   }
-  console.log(useful);
+  //console.log(useful);
 
   function checkForLeakage(x, y) {
     tested.push([x, y]);
-    console.log(x, y);
+    //console.log(x, y);
     if (a[x][y] === 0) {
       return true;
     } else if (x === 0 || x === row - 1 || y === 0 || y === col - 1) {
@@ -90,6 +92,7 @@ var FindStoredWater = function (arr) {
     }
     return true;   // Not found
   }
-  return {"storedWater":useful,"usedCubes":used}
+  console.log(used);
+  return {"storedWater":useful,"usedCubes":storedCudes,"maxHeight":maxHeight}
 };
 export default FindStoredWater;

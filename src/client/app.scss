@@ -1,3 +1,36 @@
-body {
-    font-size: 12px;
+html,body{
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  font-size: 16px;
+  margin: 0;
+  font-weight: 400;
+  padding: 0;
+  overflow-x: hidden;
+  color: #000000;
+  background: #f9f9f9;
+}
+h1, h2, h3, h4, h5, h6{
+  font-weight: 400;
+}
+.nav-link{
+  color: #ffffff;
+  padding: 4px 10px;
+  text-decoration: none;
+  display: inline;
+}
+.file-upload-segment{
+  display: flex;
+  align-items: stretch;;
+  justify-content: center;
+  margin-top: 5rem;
+}
+.file-upload-segment .file-name{
+  width: 50%;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #e2e2e2;
+}
+.file-upload-segment .file-name p{
+  margin: 0;
 }

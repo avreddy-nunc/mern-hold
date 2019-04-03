@@ -9,7 +9,15 @@ const PlatformSchema = new mongoose.Schema({
         type : Number,
         default : 0
     },
-    file : {
+    array : {
+        type : Array,
+        default : []
+    },
+    storedCubes : {
+        type : Array,
+        default : []
+    },
+    fileName : {
         type : String
     }
 });
