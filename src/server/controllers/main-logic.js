@@ -34,7 +34,7 @@ var FindStoredWater = function (arr) {
               a[i][j]++;
               //console.log(i, j, 'used', a[i][j]);
               used.push([i, j]);
-              storedCudes.push([i,j]);
+              storedCudes.push([i,j,k]);
               useful++
             }
           }

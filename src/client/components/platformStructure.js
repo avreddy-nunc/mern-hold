@@ -6,9 +6,27 @@ import textureImage from "./../helpers/uv_test_bw.png";
 class PlatformStructure extends Component{
     constructor(props){
         super(props);
+        this.state = {
+            arr : this.props.arr,
+            height : this.props.height,
+            storedCubes : this.props.storedArr
+        };
         this.containerRef = React.createRef();
+        this.drawStructure = this.drawStructure.bind(this);
     }
     componentDidMount(){
+        this.drawStructure();
+    }
+    componentWillReceiveProps(nextProps, nextContext) {
+        this.setState({
+            arr : nextProps.arr,
+            height : nextProps.arr,
+            storedCubes : nextProps.storedArr
+        },()=>{
+            this.drawStructure();
+        })
+    }
+    drawStructure(){
         let container;
         let camera;
         let controls;
@@ -18,8 +36,8 @@ class PlatformStructure extends Component{
         var self = this;
         var textureLoaded = false;
         function init() {
-            container = document.getElementById(self.props.id);
-
+            container = self.containerRef.current;
+            container.innerHTML = '';
             scene = new THREE.Scene();
             scene.background =  new THREE.Color(0x8fbcd4);
 
@@ -28,6 +46,8 @@ class PlatformStructure extends Component{
             createLights();
             createMeshes();
             createRenderer();
+            update();
+            render();
 
             // start the animation loop
             renderer.setAnimationLoop(() => {
@@ -38,7 +58,7 @@ class PlatformStructure extends Component{
 
         function createCamera() {
             camera = new THREE.PerspectiveCamera(
-                20, // FOV
+                70, // FOV
                 container.clientWidth / container.clientHeight, // aspect
                 0.1, // near clipping plane
                 100 // far clipping plane
@@ -67,28 +87,6 @@ class PlatformStructure extends Component{
         function createMeshes() {
             const geometry = new THREE.BoxBufferGeometry(1, 1, 1);
             var textureLoader = new THREE.TextureLoader();
-            console.log(textureImage);
-            /*textureLoader.load(
-                // resource URL
-                textureImage,
-                // Function when resource is loaded
-                function ( texture ) {
-                    // do something with the texture
-                    texture.encoding = THREE.sRGBEncoding;
-                    texture.anisotropy = 16;
-                    material = new THREE.MeshBasicMaterial( {
-                        map: texture
-                    } );
-                },
-                // Function called when download progresses
-                function ( xhr ) {
-                    console.log( (xhr.loaded / xhr.total * 100) + '% loaded' );
-                },
-                // Function called when download errors
-                function ( xhr ) {
-                    console.log( 'An error happened' );
-                }
-            );*/
             const texture = textureLoader.load(textureImage,function () {
                 render();
             });
@@ -97,18 +95,29 @@ class PlatformStructure extends Component{
             texture.anisotropy = 16;
 
             const material = new THREE.MeshStandardMaterial({
-                map: texture
+                map: texture,
+                transparent : true
             });
-            var xoffset = self.props.arr.length/2;
-            var yoffset = self.props.arr[0].length/2;
-            for(var i=0;i<self.props.arr.length;i++){
-                for(var j=0;j<self.props.arr[0].length;j++){
-                    for(var k=0;k<self.props.arr[i][j];k++){
+            var xoffset = self.state.arr.length/2;
+            var yoffset = self.state.arr[0].length/2;
+            var zoffset = self.state.height/2;
+            for(var i=0;i<self.state.arr.length;i++){
+                for(var j=0;j<self.state.arr[0].length;j++){
+                    for(var k=0;k<self.state.arr[i][j];k++){
                         mesh = new THREE.Mesh(geometry, material);
                         mesh.position.set(i-xoffset,k,j-yoffset);
                         scene.add(mesh);
                     }
                 }
+            }
+            const waterMaterial = new THREE.MeshBasicMaterial({
+                color : 0x0077be
+            });
+           //console.log(self.state.storedCubes);
+            for(var w=0;w<self.state.storedCubes.length;w++){
+                mesh = new THREE.Mesh(geometry, waterMaterial);
+                mesh.position.set(self.state.storedCubes[w][0]-xoffset,self.state.storedCubes[w][2],self.state.storedCubes[w][1]-yoffset);
+                scene.add(mesh);
             }
         }
 
@@ -136,21 +145,6 @@ class PlatformStructure extends Component{
         function render() {
             renderer.render(scene, camera);
         }
-
-// a function that will be called every time the window gets resized.
-// It can get called a lot, so don't put any heavy computation in here!
-        function onWindowResize() {
-            // set the aspect ratio to match the new browser window aspect ratio
-            camera.aspect = container.clientWidth / container.clientHeight;
-
-            // update the camera's frustum
-            camera.updateProjectionMatrix();
-
-            // update the size of the renderer AND the canvas
-            renderer.setSize(container.clientWidth, container.clientHeight);
-        }
-
-        window.addEventListener("resize", onWindowResize);
 
 // call the init function to set everything up
         init();
