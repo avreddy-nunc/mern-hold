@@ -117,7 +117,7 @@ class Home extends Component{
                 <div className={'file-upload-segment'}>
                     <Button variant={"contained"} color={"primary"} component={'label'} htmlFor={'chooseFile'}>Choose</Button>
                     <input type={'file'} id={'chooseFile'} style={{display:'none'}} onChange={this.handleFileInputChange} name={'numpyFile'}/>
-                    <div className={'file-name'}><p>{this.state.file?this.state.file.name:'Add a file'}</p></div>
+                    <div className={'file-name'}><p>{this.state.file?this.state.file.name:'Add only numpy file'}</p></div>
                     <Button variant={"contained"} color={"secondary"} onClick={this.submitFile}>Submit</Button>
                 </div>
                 {this.state.isLoading?<div style={{textAlign: 'center'}}><h4>Loading</h4></div>:
