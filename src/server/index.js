@@ -11,6 +11,7 @@ global.path = path;
 global.dotenv = dotenv;
 // this is our MongoDB database
 const dbRoute = require("./config");
+var port=Number(process.env.PORT || 3000);
 
 // connects our back end code with the database
 mongoose.connect(
@@ -38,6 +39,6 @@ app.use('/api', Routes);
 app.get('*', (req,res) =>{
     res.sendFile(path.join(__dirname+'./../../public/index.html'));
 });
-app.listen(process.env.port, () => {
-    utils.log(`Server has started and is listening on port ${process.env.port}!`)
+app.listen(port, () => {
+    utils.log(`Server has started and is listening on port ${port}!`)
 });
