@@ -7,6 +7,7 @@
     "test": "tests"
   },
   "scripts": {
+    "heroku-prebuild": "npm install --dev",
     "build": "webpack --config webpack.common.js --mode production",
     "dev": "webpack-dev-server --config webpack.common.js --mode development --open --watch",
     "test": "echo \"Error: no test specified but lets exit with success so travis builds\" && exit 0",
