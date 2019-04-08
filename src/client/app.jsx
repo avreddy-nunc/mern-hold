@@ -5,7 +5,7 @@ import  {BrowserRouter as Router, Switch, Route,NavLink } from "react-router-dom
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import blue from '@material-ui/core/colors/blue';
 import pink from '@material-ui/core/colors/pink';
-import { AppBar } from "@material-ui/core"
+import { AppBar,Button } from "@material-ui/core"
 import Home from "./components/Home";
 import List from "./components/List";
 
@@ -30,9 +30,9 @@ class App extends React.Component {
         return (
             <MuiThemeProvider theme={theme} >
                 <Router>
-                    <AppBar position={"sticky"}>
-                        <NavLink to={'/'} className={'nav-link'}>Home</NavLink>
-                        <NavLink to={'/list'} className={'nav-link'}>List</NavLink>
+                    <AppBar position={"sticky"} style={{flexDirection: 'row'}}>
+                        <Button component={NavLink} color={"primary"} style={{color:"#fff",margin:'4px 8px'}} to={'/'} >Home</Button>
+                        <Button component={NavLink} color={"primary"} style={{color:"#fff",margin:'4px 8px'}} to={'/list'} >List</Button>
                     </AppBar>
                     <Switch>
                         <Route path={'/'} exact component={Home} />

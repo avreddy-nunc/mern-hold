@@ -26,13 +26,17 @@ class PlatformList extends Component{
                                   transitionDuration={'0.5s'}
                                   startAngle={-90} animate={true}/>
                         </div>
-                        <div>
-                            <p><span class="white-box"></span> Total volume = {data.array.length * data.array[0].length * data.height} Units<br/>
-                                <span className={'black-box'}></span> Water = {data.water} Units ( {(data.water*100/(data.array.length * data.array[0].length * data.height)).toFixed(2)}% )</p>
-                        </div>
+
                     </td>
-                    <td style={{padding:'0'}}>
-                    <PlatformStructure arr={data.array} id={data._id} storedArr={data.storedCubes} />
+                    <td style={{width:'400px'}}>
+                        <div>
+                            <p><span className="white-box"></span> Total volume
+                                = {data.array.length * data.array[0].length * data.height} Units<br/>
+                                <span className={'black-box'}></span> Water Stored = {data.water} Units
+                                ( {(data.water * 100 / (data.array.length * data.array[0].length * data.height)).toFixed(2)}%
+                                )</p>
+                        </div>
+                    {/*<PlatformStructure arr={data.array} id={data._id} storedArr={data.storedCubes} />*/}
                     </td>
 
                 </tr>

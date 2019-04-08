@@ -17,7 +17,7 @@ class PlatformStructure extends Component{
     componentDidMount(){
         this.drawStructure();
     }
-    componentWillReceiveProps(nextProps, nextContext) {
+    /*componentWillReceiveProps(nextProps, nextContext) {
         this.setState({
             arr : nextProps.arr,
             height : nextProps.arr,
@@ -25,7 +25,7 @@ class PlatformStructure extends Component{
         },()=>{
             this.drawStructure();
         })
-    }
+    }*/
     drawStructure(){
         let container;
         let camera;
@@ -37,7 +37,7 @@ class PlatformStructure extends Component{
         var textureLoaded = false;
         function init() {
             container = self.containerRef.current;
-            container.innerHTML = '';
+            //container.innerHTML = '';
             scene = new THREE.Scene();
             scene.background =  new THREE.Color(0x8fbcd4);
 
@@ -46,8 +46,6 @@ class PlatformStructure extends Component{
             createLights();
             createMeshes();
             createRenderer();
-            update();
-            render();
 
             // start the animation loop
             renderer.setAnimationLoop(() => {
@@ -58,7 +56,7 @@ class PlatformStructure extends Component{
 
         function createCamera() {
             camera = new THREE.PerspectiveCamera(
-                70, // FOV
+                20, // FOV
                 container.clientWidth / container.clientHeight, // aspect
                 0.1, // near clipping plane
                 100 // far clipping plane
@@ -83,7 +81,6 @@ class PlatformStructure extends Component{
 
             scene.add(ambientLight, mainLight);
         }
-        var material;
         function createMeshes() {
             const geometry = new THREE.BoxBufferGeometry(1, 1, 1);
             var textureLoader = new THREE.TextureLoader();
@@ -95,29 +92,19 @@ class PlatformStructure extends Component{
             texture.anisotropy = 16;
 
             const material = new THREE.MeshStandardMaterial({
-                map: texture,
-                transparent : true
+                map: texture
             });
-            var xoffset = self.state.arr.length/2;
-            var yoffset = self.state.arr[0].length/2;
-            var zoffset = self.state.height/2;
-            for(var i=0;i<self.state.arr.length;i++){
-                for(var j=0;j<self.state.arr[0].length;j++){
-                    for(var k=0;k<self.state.arr[i][j];k++){
+            var xoffset = self.props.arr.length/2;
+            var yoffset = self.props.arr[0].length/2;
+            var zoffset = self.props.height/2;
+            for(var i=0;i<self.props.arr.length;i++){
+                for(var j=0;j<self.props.arr[0].length;j++){
+                    for(var k=0;k<self.props.arr[i][j];k++){
                         mesh = new THREE.Mesh(geometry, material);
                         mesh.position.set(i-xoffset,k,j-yoffset);
                         scene.add(mesh);
                     }
                 }
-            }
-            const waterMaterial = new THREE.MeshBasicMaterial({
-                color : 0x0077be
-            });
-           //console.log(self.state.storedCubes);
-            for(var w=0;w<self.state.storedCubes.length;w++){
-                mesh = new THREE.Mesh(geometry, waterMaterial);
-                mesh.position.set(self.state.storedCubes[w][0]-xoffset,self.state.storedCubes[w][2],self.state.storedCubes[w][1]-yoffset);
-                scene.add(mesh);
             }
         }
 

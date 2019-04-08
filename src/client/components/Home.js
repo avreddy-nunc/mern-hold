@@ -9,214 +9,7 @@ class Home extends Component{
         super(props);
         this.state = {
             file : null,
-            responseData : {
-                "_id": {
-                    "$oid": "5ca90f82647024348897799e"
-                },
-                "water": 32,
-                "height": 9,
-                "array": [
-                    [
-                        5,
-                        5,
-                        5,
-                        5,
-                        5
-                    ],
-                    [
-                        9,
-                        1,
-                        1,
-                        1,
-                        5
-                    ],
-                    [
-                        5,
-                        1,
-                        5,
-                        1,
-                        5
-                    ],
-                    [
-                        5,
-                        1,
-                        1,
-                        1,
-                        5
-                    ],
-                    [
-                        5,
-                        5,
-                        5,
-                        5,
-                        5
-                    ]
-                ],
-                "storedCubes": [
-                    [
-                        1,
-                        1,
-                        2
-                    ],
-                    [
-                        1,
-                        2,
-                        2
-                    ],
-                    [
-                        1,
-                        3,
-                        2
-                    ],
-                    [
-                        2,
-                        1,
-                        2
-                    ],
-                    [
-                        2,
-                        3,
-                        2
-                    ],
-                    [
-                        3,
-                        1,
-                        2
-                    ],
-                    [
-                        3,
-                        2,
-                        2
-                    ],
-                    [
-                        3,
-                        3,
-                        2
-                    ],
-                    [
-                        1,
-                        1,
-                        3
-                    ],
-                    [
-                        1,
-                        2,
-                        3
-                    ],
-                    [
-                        1,
-                        3,
-                        3
-                    ],
-                    [
-                        2,
-                        1,
-                        3
-                    ],
-                    [
-                        2,
-                        3,
-                        3
-                    ],
-                    [
-                        3,
-                        1,
-                        3
-                    ],
-                    [
-                        3,
-                        2,
-                        3
-                    ],
-                    [
-                        3,
-                        3,
-                        3
-                    ],
-                    [
-                        1,
-                        1,
-                        4
-                    ],
-                    [
-                        1,
-                        2,
-                        4
-                    ],
-                    [
-                        1,
-                        3,
-                        4
-                    ],
-                    [
-                        2,
-                        1,
-                        4
-                    ],
-                    [
-                        2,
-                        3,
-                        4
-                    ],
-                    [
-                        3,
-                        1,
-                        4
-                    ],
-                    [
-                        3,
-                        2,
-                        4
-                    ],
-                    [
-                        3,
-                        3,
-                        4
-                    ],
-                    [
-                        1,
-                        1,
-                        5
-                    ],
-                    [
-                        1,
-                        2,
-                        5
-                    ],
-                    [
-                        1,
-                        3,
-                        5
-                    ],
-                    [
-                        2,
-                        1,
-                        5
-                    ],
-                    [
-                        2,
-                        3,
-                        5
-                    ],
-                    [
-                        3,
-                        1,
-                        5
-                    ],
-                    [
-                        3,
-                        2,
-                        5
-                    ],
-                    [
-                        3,
-                        3,
-                        5
-                    ]
-                ],
-                "fileName": "data.npy",
-                "__v": 0
-            },
+            responseData : null,
             isLoading : false
         };
         this.handleFileInputChange = this.handleFileInputChange.bind(this);
@@ -327,8 +120,8 @@ class Home extends Component{
                     <div className={'file-name'}><p>{this.state.file?this.state.file.name:'Add a file'}</p></div>
                     <Button variant={"contained"} color={"secondary"} onClick={this.submitFile}>Submit</Button>
                 </div>
-                {this.state.isLoading?<div>Loading</div>:
-                    <table className={'data-table'}>
+                {this.state.isLoading?<div style={{textAlign: 'center'}}><h4>Loading</h4></div>:
+                    (this.state.responseData?<table className={'data-table'}>
                         <thead>
                         <tr className={'row'}>
                             <th className={'item'}>
@@ -345,7 +138,7 @@ class Home extends Component{
                         <tbody>
                         <PlatformList data={this.state.responseData} />
                         </tbody>
-                    </table>}
+                    </table>:'')}
             </div>
         )
     }
